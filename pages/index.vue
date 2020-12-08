@@ -1,62 +1,40 @@
 <template>
-  <div class="container">
-    <div>
-      <Logo />
-      <h1 class="title">Nuxt</h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
-    </div>
+  <div>
+    <h1>Events</h1>
+
+    <EventCard
+      v-for="(event, index) in events"
+      :key="index"
+      :event="event"
+      :data-index="index"
+    />
   </div>
 </template>
-
 <script>
-export default {}
+import EventCard from '@/components/EventCard.vue'
+import { mapState } from 'vuex'
+
+export default {
+  components: {
+    EventCard,
+  },
+  async fetch({ store, error }) {
+    try {
+      await store.dispatch('events/fetchEvents')
+    } catch (e) {
+      error({
+        statusCode: 503,
+        message: 'Unable to fetch events at this time. Please try again.',
+      })
+    }
+  },
+  computed: mapState({
+    events: (state) => state.events.events,
+  }),
+  head() {
+    return {
+      title: 'Event Listing',
+    }
+  },
+}
 </script>
-
-<style>
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.title {
-  display: block;
-  color: #35495e;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 100px;
-  font-weight: 300;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  padding-bottom: 15px;
-  color: #526488;
-  font-size: 42px;
-  font-weight: 300;
-  word-spacing: 5px;
-}
-
-.links {
-  padding-top: 15px;
-}
-</style>

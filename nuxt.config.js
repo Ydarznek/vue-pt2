@@ -1,7 +1,9 @@
+import EventService from './services/EventService.js'
+
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    title: 'y',
+    title: 'vue nuxt',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -12,6 +14,7 @@ export default {
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [],
+  loading: { color: '#39b982' },
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [],
@@ -38,4 +41,14 @@ export default {
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
+
+  generate: {
+    routes: () => {
+      return EventService.getEvents().then((response) => {
+        return response.data.map((event) => {
+          return '/event/' + event.id
+        })
+      })
+    },
+  },
 }
