@@ -1,4 +1,4 @@
-# y
+# Vue nuxt
 
 ## Build Setup
 
